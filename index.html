@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>吴昊 | 个人主页</title>
+  <meta name="description" content="吴昊的个人主页 - 杭州电子科技大学 机械工程学院 2025级" />
+  <style>
+    /* ========================================
+       CSS 变量 & 全局重置
+       ======================================== */
+    :root {
+      --bg-primary: #1a0a1e;
+      --bg-secondary: #2d1b3d;
+      --bg-card: rgba(30, 15, 40, 0.85);
+      --neon-cyan: #4a9eff;
+      --neon-cyan-dim: rgba(74, 158, 255, 0.15);
+      --violet: #6bb6ff;
+      --violet-dim: rgba(107, 182, 255, 0.15);
+      --text-primary: #e0f0ff;
+      --text-secondary: #8bb8e8;
+      --text-accent: #4a9eff;
+      --border-color: rgba(74, 158, 255, 0.2);
+      --glow-cyan: 0 0 20px rgba(74, 158, 255, 0.3);
+      --glow-violet: 0 0 20px rgba(107, 182, 255, 0.3);
+      --font-mono: 'Courier New', 'Consolas', monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --nav-height: 60px;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--nav-height);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ========================================
+       背景装饰层 - 樱花主题
+       ======================================== */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* 樱花渐变背景 */
+    .sakura-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(74, 158, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(107, 182, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(139, 184, 232, 0.05) 0%, transparent 50%);
+    }
+
+    /* 柔和光晕 */
+    .glow-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(26, 10, 30, 0.4) 100%);
+    }
+
+    /* 背景大爱心 */
+    .bg-heart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.06;
+    }
+
+    .bg-heart::before,
+    .bg-heart::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 250px;
+      height: 400px;
+      background: #4a9eff;
+      border-radius: 250px 250px 0 0;
+    }
+
+    .bg-heart::before {
+      left: 250px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+
+    .bg-heart::after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    /* 了解更多按钮 */
+    .learn-more-btn {
+      display: block;
+      margin: 2rem auto;
+      padding: 12px 32px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-accent);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .learn-more-btn:hover {
+      border-color: var(--text-accent);
+      box-shadow: var(--glow-cyan);
+      background: var(--neon-cyan-dim);
+    }
+
+    /* 联系方式折叠容器 */
+    .contact-collapsible {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s ease, opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .contact-collapsible.open {
+      max-height: 1000px;
+      opacity: 1;
+    }
+
+    /* ========================================
+       导航栏
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--nav-height);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      background: rgba(10, 14, 26, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      text-decoration: none;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .nav-logo::before {
+      content: '//';
+      color: var(--violet);
+      margin-right: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--neon-cyan);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon-cyan);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* 移动端菜单按钮 */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    /* ========================================
+       主内容区域
+       ======================================== */
+    main {
+      position: relative;
+      z-index: 2;
+    }
+
+    section {
+      padding: 5rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ========================================
+       Hero 首屏
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding-top: var(--nav-height);
+    }
+
+    /* 准星装饰 */
+    .crosshair {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .crosshair::before,
+    .crosshair::after {
+      content: '';
+      position: absolute;
+      background: var(--neon-cyan);
+    }
+
+    .crosshair::before {
+      top: 50%;
+      left: 10%;
+      width: 80%;
+      height: 1px;
+    }
+
+    .crosshair::after {
+      left: 50%;
+      top: 10%;
+      width: 1px;
+      height: 80%;
+    }
+
+    .crosshair-tl { top: 15%; left: 8%; }
+    .crosshair-br { bottom: 15%; right: 8%; }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      margin-bottom: 1.5rem;
+      background: var(--bg-card);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-name {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #4a9eff, #6bb6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-info {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.8s forwards;
+    }
+
+    .hero-info span {
+      margin: 0 0.5rem;
+      color: var(--border-color);
+    }
+
+    /* 向下滚动提示 */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 1.4s forwards;
+    }
+
+    .scroll-hint span {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 1px solid var(--neon-cyan);
+      border-bottom: 1px solid var(--neon-cyan);
+      transform: rotate(45deg);
+      animation: bounce-arrow 2s ease infinite;
+    }
+
+    @keyframes bounce-arrow {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.5; }
+      50% { transform: rotate(45deg) translateY(6px); opacity: 1; }
+    }
+
+    /* ========================================
+       关于我
+       ======================================== */
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::before {
+      content: '> ';
+      color: var(--neon-cyan);
+      font-family: var(--font-mono);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-cyan), transparent);
+    }
+
+    .about-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .about-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+
+    .about-text em {
+      color: var(--violet);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .about-text strong {
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    /* 标签 */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      padding: 6px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      background: var(--bg-card);
+      transition: all 0.3s ease;
+    }
+
+    .tag:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .tag.violet:hover {
+      border-color: var(--violet);
+      color: var(--violet);
+      box-shadow: var(--glow-violet);
+    }
+
+    .tag-hint {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      opacity: 0.6;
+    }
+
+    /* ========================================
+       联系方式
+       ======================================== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .contact-grid.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #4a9eff, #6bb6ff);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-card:hover {
+      border-color: rgba(0, 229, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), var(--glow-cyan);
+    }
+
+    .contact-card:hover::before {
+      opacity: 1;
+    }
+
+    /* QR 卡片特殊样式 */
+    .qr-card {
+      cursor: pointer;
+    }
+
+    .qr-toggle {
+      background: linear-gradient(135deg, #4a9eff, #6bb6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      border-color: var(--violet);
+      font-weight: 600;
+    }
+
+    .qr-toggle:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: var(--glow-violet);
+    }
+
+    .contact-hint {
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      text-align: center;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .contact-value {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .contact-value span {
+      font-size: 1rem;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .copy-btn.copied {
+      border-color: #4caf50;
+      color: #4caf50;
+    }
+
+    /* 手机号显示切换 */
+    .phone-toggle {
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .phone-toggle:hover {
+      color: var(--neon-cyan);
+    }
+
+    /* ========================================
+       页脚
+       ======================================== */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
+      background: rgba(10, 14, 26, 0.95);
+    }
+
+    .footer-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .back-to-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.3s ease;
+    }
+
+    .back-to-top:hover {
+      color: var(--neon-cyan);
+    }
+
+    .back-to-top svg {
+      width: 14px;
+      height: 14px;
+      transform: rotate(180deg);
+    }
+
+    /* ========================================
+       Toast 提示
+       ======================================== */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.4s ease;
+      box-shadow: var(--glow-cyan);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ========================================
+       动画关键帧
+       ======================================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========================================
+       关键词链接样式
+       ======================================== */
+    .keyword-link {
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+      border-bottom: 1px dashed rgba(179, 136, 255, 0.4);
+    }
+
+    .keyword-link:hover {
+      color: var(--violet) !important;
+      border-bottom-color: var(--violet);
+      text-shadow: 0 0 8px rgba(179, 136, 255, 0.4);
+    }
+
+    /* ========================================
+       灯箱 Modal
+       ======================================== */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 8, 16, 0.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(0.9);
+      transition: transform 0.4s ease;
+    }
+
+    .lightbox.active .lightbox-content {
+      transform: scale(1);
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 40px rgba(0, 229, 255, 0.15), 0 20px 60px rgba(0, 0, 0, 0.5);
+      object-fit: contain;
+    }
+
+    .lightbox-caption {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      letter-spacing: 1px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 36px;
+      height: 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .lightbox-close:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* ========================================
+       响应式适配
+       ======================================== */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 1.2rem;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        background: rgba(10, 14, 26, 0.97);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+
+      .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .nav-links li {
+        width: 100%;
+        text-align: center;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 1rem;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      section {
+        padding: 3rem 1.2rem;
+      }
+
+      .crosshair {
+        display: none;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-name {
+        font-size: 2.2rem;
+      }
+
+      .hero-info {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 樱花飘落 Canvas -->
+  <canvas id="bg-canvas"></canvas>
+  <!-- 樱花渐变背景 -->
+  <div class="sakura-bg"></div>
+  <!-- 柔和光晕 -->
+  <div class="glow-overlay"></div>
+  <!-- 背景大爱心 -->
+  <div class="bg-heart"></div>
+
+  <!-- ======== 导航栏 ======== -->
+  <nav class="navbar" id="navbar">
+    <a href="#hero" class="nav-logo">吴昊</a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">关于我</a></li>
+      <li><a href="#contact">想和你成为朋友</a></li>
+    </ul>
+  </nav>
+
+  <!-- ======== 主内容 ======== -->
+  <main>
+    <!-- Hero 首屏 -->
+    <section class="hero" id="hero">
+      <!-- 准星装饰 -->
+      <div class="crosshair crosshair-tl"></div>
+      <div class="crosshair crosshair-br"></div>
+
+      <div class="hero-badge">[ SYSTEM ONLINE ]</div>
+      <h1 class="hero-name">吴昊</h1>
+      <p class="hero-subtitle">杭州电子科技大学 · 机械工程学院 · 2025级</p>
+      <p class="hero-info">
+        江苏扬州 <span>|</span> 本科在读
+      </p>
+
+      <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section id="about">
+      <h2 class="section-title">关于我</h2>
+      <div class="about-content" id="aboutContent">
+        <p class="about-text">
+          你好，我是<strong>吴昊</strong>，来自江苏扬州，目前是杭州电子科技大学机械工程学院2025级本科生。
+          我喜欢在平时去<strong>健身</strong>，喜欢打<strong>三角洲</strong>，同时我也热爱看<strong>动漫</strong>和<strong>短剧</strong>。
+          最喜欢的动漫是《<em>紫罗兰永恒花园</em>》。
+        </p>
+        <div class="tags">
+          <span class="tag keyword-link" id="tagPhoto">我</span>
+        </div>
+        <p class="tag-hint">点击标签查看我的生活瞬间</p>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact">
+      <h2 class="section-title">想和你成为朋友</h2>
+      <button class="learn-more-btn" id="learnMoreBtn">了解更多</button>
+      <div class="contact-collapsible" id="contactCollapsible">
+        <div class="contact-grid" id="contactGrid">
+          <!-- 微信二维码 -->
+          <div class="contact-card qr-card" data-qr="images/wechat-qr.png">
+            <div class="contact-label">WeChat / 微信</div>
+            <div class="contact-value">
+              <span>Whhhhh.</span>
+              <button class="copy-btn qr-toggle">查看二维码</button>
+            </div>
+          </div>
+          <!-- QQ 二维码 -->
+          <div class="contact-card qr-card" data-qr="images/qq-qr.png">
+            <div class="contact-label">QQ</div>
+            <div class="contact-value">
+              <span>2799097663</span>
+              <button class="copy-btn qr-toggle">查看二维码</button>
+            </div>
+          </div>
+          <!-- 抖音二维码 -->
+          <div class="contact-card qr-card" data-qr="images/douyin-qr.png">
+            <div class="contact-label">Douyin / 抖音</div>
+            <div class="contact-value">
+              <span>91258048352</span>
+              <button class="copy-btn qr-toggle">查看二维码</button>
+            </div>
+          </div>
+          <!-- 手机号 -->
+          <div class="contact-card">
+            <div class="contact-label">Phone / 手机</div>
+            <div class="contact-value">
+              <span class="phone-toggle" id="phoneDisplay" data-revealed="false">132****1365</span>
+              <button class="copy-btn" data-copy="13291371365">复制</button>
+            </div>
+          </div>
+          <!-- 三角洲行动 ID -->
+          <div class="contact-card">
+            <div class="contact-label">Delta Force ID / 三角洲行动</div>
+            <div class="contact-value">
+              <span>才不喜欢当艾姆</span>
+              <button class="copy-btn" data-copy="才不喜欢当艾姆">复制</button>
+            </div>
+          </div>
+        </div>
+        <p class="contact-hint">扫描二维码，添加我为好友</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======== 图片灯箱 ======== -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-overlay" id="lightboxOverlay"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="关闭">&times;</button>
+      <img src="images/photo.jpg" alt="生活照片" class="lightbox-img" />
+      <p class="lightbox-caption">点击关键词查看我的生活瞬间</p>
+    </div>
+  </div>
+
+  <!-- ======== 页脚 ======== -->
+  <footer>
+    <div class="footer-content">
+      <p class="footer-copy">&copy; 2026 吴昊 | Built with passion & code</p>
+      <a href="#hero" class="back-to-top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+        返回顶部
+      </a>
+    </div>
+  </footer>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ======== JavaScript ======== -->
+  <script>
+    /* ========================================
+       樱花飘落动画
+       ======================================== */
+    (function initSakura() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let petals = [];
+      let meteors = [];
+      let w, h;
+      let lastMeteorTime = 0;
+      const meteorInterval = 6000; // 每6秒出现一次流星群
+      let isMeteorShower = false;
+      let showerCount = 0;
+      const showerSize = 5; // 每次流星群5颗
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+
+      // 创建樱花花瓣
+      function createPetals() {
+        petals = [];
+        const count = Math.floor((w * h) / 25000);
+        for (let i = 0; i < count; i++) {
+          petals.push({
+            x: Math.random() * w,
+            y: Math.random() * h - h,
+            size: Math.random() * 8 + 4,
+            speedY: Math.random() * 1 + 0.5,
+            speedX: Math.random() * 0.5 - 0.25,
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 2,
+            opacity: Math.random() * 0.5 + 0.2,
+            color: Math.random() > 0.5 ? '255, 183, 197' : '255, 107, 157'
+          });
+        }
+      }
+
+      // 创建流星（你的名字风格 - 蓝色流星群）
+      function createMeteor(delay = 0) {
+        const startX = Math.random() * w * 0.6 + w * 0.2;
+        const startY = -100 - Math.random() * 200;
+        setTimeout(() => {
+          meteors.push({
+            x: startX,
+            y: startY,
+            length: Math.random() * 150 + 100, // 更长的尾迹
+            speed: Math.random() * 2 + 1.5, // 更慢的速度
+            angle: Math.PI / 3.5 + (Math.random() - 0.5) * 0.2, // 更陡的角度
+            opacity: 0,
+            fadeIn: true,
+            decay: 0.003, // 更慢的消失
+            width: Math.random() * 2 + 2, // 更粗
+            glow: Math.random() * 10 + 15 // 光晕大小
+          });
+        }, delay);
+      }
+
+      // 触发流星群
+      function triggerMeteorShower() {
+        isMeteorShower = true;
+        showerCount = 0;
+        // 每隔300ms发射一颗，形成群落感
+        for (let i = 0; i < showerSize; i++) {
+          createMeteor(i * 300);
+        }
+      }
+
+      // 绘制花瓣形状
+      function drawPetal(x, y, size, rotation, color, opacity) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = `rgba(${color}, 1)`;
+        ctx.beginPath();
+        // 花瓣形状
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(size / 2, -size / 2, size, 0, 0, size);
+        ctx.bezierCurveTo(-size, 0, -size / 2, -size / 2, 0, 0);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 绘制流星（你的名字风格 - 蓝色光晕）
+      function drawMeteor(m) {
+        ctx.save();
+        ctx.globalAlpha = m.opacity;
+
+        // 外层光晕
+        const glowGradient = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.glow);
+        glowGradient.addColorStop(0, 'rgba(100, 180, 255, 0.4)');
+        glowGradient.addColorStop(0.5, 'rgba(60, 140, 255, 0.15)');
+        glowGradient.addColorStop(1, 'rgba(30, 100, 255, 0)');
+        ctx.fillStyle = glowGradient;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.glow, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 流星尾迹渐变（蓝色系）
+        const tailX = m.x - Math.cos(m.angle) * m.length;
+        const tailY = m.y - Math.sin(m.angle) * m.length;
+        const gradient = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+        gradient.addColorStop(0, 'rgba(200, 230, 255, 1)');
+        gradient.addColorStop(0.2, 'rgba(100, 180, 255, 0.8)');
+        gradient.addColorStop(0.5, 'rgba(60, 140, 255, 0.4)');
+        gradient.addColorStop(1, 'rgba(30, 100, 255, 0)');
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = m.width;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        // 流星头部明亮核心
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.width * 2, 0, Math.PI * 2);
+        const coreGradient = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.width * 2);
+        coreGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        coreGradient.addColorStop(0.5, 'rgba(180, 220, 255, 0.8)');
+        coreGradient.addColorStop(1, 'rgba(100, 180, 255, 0)');
+        ctx.fillStyle = coreGradient;
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      function draw(timestamp) {
+        ctx.clearRect(0, 0, w, h);
+
+        // 绘制花瓣
+        petals.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX + Math.sin(p.y * 0.01) * 0.3;
+          p.rotation += p.rotationSpeed;
+          if (p.y > h + 20) {
+            p.y = -20;
+            p.x = Math.random() * w;
+          }
+          if (p.x < -20) p.x = w + 20;
+          if (p.x > w + 20) p.x = -20;
+          drawPetal(p.x, p.y, p.size, p.rotation, p.color, p.opacity);
+        });
+
+        // 定时触发流星群
+        if (!isMeteorShower && timestamp - lastMeteorTime > meteorInterval) {
+          triggerMeteorShower();
+          lastMeteorTime = timestamp;
+        }
+
+        // 更新和绘制流星
+        meteors = meteors.filter(m => m.opacity > 0 || m.fadeIn);
+        meteors.forEach(m => {
+          // 淡入效果
+          if (m.fadeIn) {
+            m.opacity += 0.02;
+            if (m.opacity >= 1) {
+              m.opacity = 1;
+              m.fadeIn = false;
+            }
+          } else {
+            m.opacity -= m.decay;
+          }
+
+          m.x += Math.cos(m.angle) * m.speed;
+          m.y += Math.sin(m.angle) * m.speed;
+          drawMeteor(m);
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      createPetals();
+      requestAnimationFrame(draw);
+
+      window.addEventListener('resize', () => {
+        resize();
+        createPetals();
+      });
+    })();
+
+    /* ========================================
+       导航栏滚动效果 & 移动端菜单
+       ======================================== */
+    const navbar = document.getElementById('navbar');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // 点击导航链接后关闭移动端菜单
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    /* ========================================
+       进入动画 (Intersection Observer)
+       ======================================== */
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.about-content, .contact-grid').forEach(el => {
+      observer.observe(el);
+    });
+
+    /* ========================================
+       手机号显示/隐藏切换
+       ======================================== */
+    const phoneDisplay = document.getElementById('phoneDisplay');
+    phoneDisplay.addEventListener('click', () => {
+      const revealed = phoneDisplay.dataset.revealed === 'true';
+      if (revealed) {
+        phoneDisplay.textContent = '132****1365';
+        phoneDisplay.dataset.revealed = 'false';
+      } else {
+        phoneDisplay.textContent = '13291371365';
+        phoneDisplay.dataset.revealed = 'true';
+      }
+    });
+
+    /* ========================================
+       复制功能
+       ======================================== */
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.dataset.copy;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          showToast('已复制到剪贴板');
+          setTimeout(() => {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1500);
+        }).catch(() => {
+          // 降级方案
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          showToast('已复制到剪贴板');
+          setTimeout(() => {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    });
+    /* ========================================
+       灯箱 - 关键词点击打开照片
+       ======================================== */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxImg = lightbox.querySelector('.lightbox-img');
+    const lightboxCaption = lightbox.querySelector('.lightbox-caption');
+
+    function openLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxCaption.textContent = caption || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // 标签"我"点击
+    document.getElementById('tagPhoto').addEventListener('click', () => {
+      openLightbox('images/photo.jpg', '点击关键词查看我的生活瞬间');
+    });
+
+    // QR 卡片点击
+    document.querySelectorAll('.qr-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const qrSrc = card.dataset.qr;
+        const label = card.querySelector('.contact-label').textContent;
+        openLightbox(qrSrc, `扫描${label}二维码添加好友`);
+      });
+    });
+
+    // 关闭按钮 & 点击遮罩关闭
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxOverlay.addEventListener('click', closeLightbox);
+
+    // ESC 键关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        closeLightbox();
+      }
+    });
+
+    // 了解更多按钮 - 展开/收起联系方式
+    const learnMoreBtn = document.getElementById('learnMoreBtn');
+    const contactCollapsible = document.getElementById('contactCollapsible');
+    
+    learnMoreBtn.addEventListener('click', () => {
+      const isOpen = contactCollapsible.classList.contains('open');
+      if (isOpen) {
+        contactCollapsible.classList.remove('open');
+        learnMoreBtn.textContent = '了解更多';
+      } else {
+        contactCollapsible.classList.add('open');
+        learnMoreBtn.textContent = '收起';
+      }
+    });
+  </script>
+</body>
+</html>
